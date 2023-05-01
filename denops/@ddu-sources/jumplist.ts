@@ -10,7 +10,10 @@ import {
 } from "https://deno.land/x/denops_std@v4.1.5/function/mod.ts";
 import * as z from "https://deno.land/x/zod@v3.16.1/mod.ts";
 
-type Params = Record<never, never>;
+type Params = {
+  winnr: number;
+  tabnr: number;
+};
 
 const JumpSchema = z.tuple([
   z.array(
@@ -30,10 +33,15 @@ export class Source extends BaseSource<Params> {
 
   gather(args: {
     denops: Denops;
+    sourceParams: Params;
   }): ReadableStream<Item<ActionData>[]> {
     return new ReadableStream({
       async start(controller) {
-        const originalJumpList = await getjumplist(args.denops);
+        const originalJumpList = await getjumplist(
+          args.denops,
+          args.sourceParams.winnr,
+          args.sourceParams.tabnr,
+        );
         try {
           const jumpList = JumpSchema.parse(originalJumpList);
           const items: Item<ActionData>[] = [];
@@ -70,6 +78,9 @@ export class Source extends BaseSource<Params> {
   }
 
   params(): Params {
-    return {};
+    return {
+      winnr: 1,
+      tabnr: 1,
+    };
   }
 }
