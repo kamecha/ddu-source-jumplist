@@ -11,8 +11,8 @@ import {
 import * as z from "https://deno.land/x/zod@v3.16.1/mod.ts";
 
 type Params = {
-  winnr?: number;
-  tabnr?: number;
+  winnr: number;
+  tabnr: number;
 };
 
 const JumpSchema = z.tuple([
@@ -39,8 +39,8 @@ export class Source extends BaseSource<Params> {
       async start(controller) {
         const originalJumpList = await getjumplist(
           args.denops,
-          args.sourceParams.winnr,
-          args.sourceParams.tabnr,
+          args.sourceParams.winnr === 0 ? undefined : args.sourceParams.winnr,
+          args.sourceParams.tabnr === 0 ? undefined : args.sourceParams.tabnr,
         );
         try {
           const jumpList = JumpSchema.parse(originalJumpList);
@@ -79,8 +79,8 @@ export class Source extends BaseSource<Params> {
 
   params(): Params {
     return {
-      winnr: undefined,
-      tabnr: undefined,
+      winnr: 0,
+      tabnr: 0,
     };
   }
 }
