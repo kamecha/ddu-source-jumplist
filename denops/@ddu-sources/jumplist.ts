@@ -11,8 +11,8 @@ import {
 import * as z from "https://deno.land/x/zod@v3.16.1/mod.ts";
 
 type Params = {
-  winnr: number;
-  tabnr: number;
+  winnr?: number;
+  tabnr?: number;
 };
 
 const JumpSchema = z.tuple([
@@ -79,8 +79,8 @@ export class Source extends BaseSource<Params> {
 
   params(): Params {
     return {
-      winnr: 1,
-      tabnr: 1,
+      winnr: undefined,
+      tabnr: undefined,
     };
   }
 }
