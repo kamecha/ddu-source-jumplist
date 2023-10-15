@@ -1,8 +1,5 @@
-import { Denops } from "https://deno.land/x/ddu_vim@v2.2.0/deps.ts";
-import { BaseSource, Item } from "https://deno.land/x/ddu_vim@v2.2.0/types.ts";
-import { ActionData } from "https://deno.land/x/ddu_kind_file@v0.3.2/file.ts";
-import * as fn from "https://deno.land/x/denops_std@v4.1.5/function/mod.ts";
-import * as z from "https://deno.land/x/zod@v3.16.1/mod.ts";
+import type { ActionData, Denops, Item } from "../deps.ts";
+import { BaseSource, fn, z } from "../deps.ts";
 
 type Params = {
   winnr: number;
