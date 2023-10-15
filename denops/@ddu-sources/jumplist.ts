@@ -46,7 +46,11 @@ export class Source extends BaseSource<Params> {
             ) {
               continue;
             }
-            const line = await fn.getbufline(args.denops, jump.bufnr, jump.lnum);
+            const line = await fn.getbufline(
+              args.denops,
+              jump.bufnr,
+              jump.lnum,
+            );
             const bufName = await fn.bufname(args.denops, jump.bufnr);
             items.push({
               word: bufName + ":" + jump.lnum + ":" + jump.col +
