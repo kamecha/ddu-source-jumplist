@@ -1,13 +1,7 @@
 import { Denops } from "https://deno.land/x/ddu_vim@v2.2.0/deps.ts";
 import { BaseSource, Item } from "https://deno.land/x/ddu_vim@v2.2.0/types.ts";
 import { ActionData } from "https://deno.land/x/ddu_kind_file@v0.3.2/file.ts";
-import {
-  bufexists,
-  bufname,
-  getbufline,
-  getjumplist,
-  has,
-} from "https://deno.land/x/denops_std@v4.1.5/function/mod.ts";
+import * as fn from "https://deno.land/x/denops_std@v4.1.5/function/mod.ts";
 import * as z from "https://deno.land/x/zod@v3.16.1/mod.ts";
 
 type Params = {
@@ -37,7 +31,7 @@ export class Source extends BaseSource<Params> {
   }): ReadableStream<Item<ActionData>[]> {
     return new ReadableStream({
       async start(controller) {
-        const originalJumpList = await getjumplist(
+        const originalJumpList = await fn.getjumplist(
           args.denops,
           args.sourceParams.winnr === 0 ? undefined : args.sourceParams.winnr,
           args.sourceParams.tabnr === 0 ? undefined : args.sourceParams.tabnr,
@@ -46,17 +40,17 @@ export class Source extends BaseSource<Params> {
           const jumpList = JumpSchema.parse(originalJumpList);
           const items: Item<ActionData>[] = [];
           for (const jump of jumpList[0]) {
-            if (!await bufexists(args.denops, jump.bufnr)) {
+            if (!await fn.bufexists(args.denops, jump.bufnr)) {
               continue;
             }
             if (
-              await has(args.denops, "nvim") &&
+              await fn.has(args.denops, "nvim") &&
               await args.denops.call("nvim_buf_is_valid", jump.bufnr) === false
             ) {
               continue;
             }
-            const line = await getbufline(args.denops, jump.bufnr, jump.lnum);
-            const bufName = await bufname(args.denops, jump.bufnr);
+            const line = await fn.getbufline(args.denops, jump.bufnr, jump.lnum);
+            const bufName = await fn.bufname(args.denops, jump.bufnr);
             items.push({
               word: bufName + ":" + jump.lnum + ":" + jump.col +
                 "\t" + (line[0] ?? ""),
